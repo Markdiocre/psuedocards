@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: TF;
-  src: url('src/assets/ThaleahFat.ttf');
+  src: url('/ThaleahFat.ttf');
   font-size: normal;
   font-weight: normal;
 }
