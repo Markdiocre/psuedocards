@@ -1,15 +1,118 @@
+<script setup>
+import { onMounted } from 'vue';
+import { gsap } from "gsap";
+
+import { CustomEase } from "gsap/CustomEase";
+import { RoughEase, ExpoScaleEase, SlowMo } from "gsap/EasePack";
+
+import { Flip } from "gsap/Flip";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Observer } from "gsap/Observer";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { Draggable } from "gsap/Draggable";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { EaselPlugin } from "gsap/EaselPlugin";
+import { PixiPlugin } from "gsap/PixiPlugin";
+import { TextPlugin } from "gsap/TextPlugin";
+
+gsap.registerPlugin(Flip, ScrollTrigger, Observer, ScrollToPlugin, Draggable, MotionPathPlugin, EaselPlugin, PixiPlugin, TextPlugin, RoughEase, ExpoScaleEase, SlowMo, CustomEase);
+
+function animateFrom(elem, direction) {
+  direction = direction || 1;
+  var x = 0,
+    y = direction * 100;
+  if (elem.classList.contains("gs_reveal_fromLeft")) {
+    x = -100;
+    y = 0;
+  } else if (elem.classList.contains("gs_reveal_fromRight")) {
+    x = 100;
+    y = 0;
+  }
+  elem.style.transform = "translate(" + x + "px, " + y + "px)";
+  elem.style.opacity = "0";
+  gsap.fromTo(elem, { x: x, y: y, autoAlpha: 0 }, {
+    duration: 1.25,
+    x: 0,
+    y: 0,
+    autoAlpha: 1,
+    ease: "expo",
+    overwrite: "auto"
+  });
+}
+
+function hide(elem) {
+  gsap.set(elem, { autoAlpha: 0 });
+}
+
+onMounted(() => {
+
+  gsap.from('#promotion', { y: -1000, ease: "power3.out", duration: 2 })
+
+  gsap.to("[data-speed]", {
+    y: (i, el) => (1 - parseFloat(el.getAttribute("data-speed"))) * ScrollTrigger.maxScroll(window),
+    ease: "none",
+    scrollTrigger: {
+      start: 0,
+      end: "max",
+      invalidateOnRefresh: true,
+      scrub: 0
+    }
+  });
+
+  gsap.utils.toArray(".gs_reveal").forEach(function (elem) {
+    hide(elem); // assure that the element is hidden when scrolled into view
+
+    ScrollTrigger.create({
+      trigger: elem,
+      // markers: true,
+      onEnter: function () { animateFrom(elem) },
+      onEnterBack: function () { animateFrom(elem, -1) },
+      onLeave: function () { hide(elem) } // assure that the element is hidden when scrolled into view
+    });
+  });
+
+})
+
+</script>
+
 <template>
-  <main data-scroll-container class="crt">
-    <div id="hero" data-scroll-section>
-      <div>
-        <h1 data-scroll data-scroll-speed="1">PSUEDOCARDS</h1>
-        <p data-scroll data-scroll-speed="3">A card based game for algorithm simulation using Godot Engine</p>
+
+  <nav id="nav">
+    <div class="title">
+      <h1>PSUEDOCARDS</h1>
+    </div>
+    <div class="itch">
+      <img src="/itch.svg" alt="">
+    </div>
+  </nav>
+  <main class="crt">
+    <div id="hero">
+      <div class="">
+        <h1 data-speed="0.75" class="title-main">PSUEDOCARDS</h1>
+        <p data-speed="1.2">A card based game for algorithm simulation using Godot Engine</p>
       </div>
-      
+
     </div>
     <div id="promotion" data-scroll-section>
-      <h2 data-scroll data-scroll-speed="1">What's up?</h2>
-      <p data-scroll data-scroll-speed="2">😬</p>
+
+      <div class="vid">
+        <video autoplay="autoplay" playsinline loop="loop" width="100%" muted="muted">
+          <source src="/autoplay.mp4" type="video/mp4">
+        </video>
+        <div class="text-center desc  " data-speed="1">
+          <p data-speed="1.3">
+            Test your algorithm-building skills in PsuedoCards! Connect the cards in order to solve specific
+          problems.
+          Levels will include limitations for you to work and think of your way in finishing the task.
+        </p>
+          
+        </div>
+      </div>
+
+
+
+
+
     </div>
   </main>
 
@@ -17,71 +120,45 @@
 </template>
 
 <style scoped>
+@keyframes fadeEffect {
+  from {
+    opacity: 0;
+  }
 
-@keyframes flicker {
-  0% {
-  opacity: 0.27861;
+  to {
+    opacity: 1;
   }
-  5% {
-  opacity: 0.34769;
-  }
-  10% {
-  opacity: 0.23604;
-  }
-  15% {
-  opacity: 0.90626;
-  }
-  20% {
-  opacity: 0.18128;
-  }
-  25% {
-  opacity: 0.83891;
-  }
-  30% {
-  opacity: 0.65583;
-  }
-  35% {
-  opacity: 0.67807;
-  }
-  40% {
-  opacity: 0.26559;
-  }
-  45% {
-  opacity: 0.84693;
-  }
-  50% {
-  opacity: 0.96019;
-  }
-  55% {
-  opacity: 0.08594;
-  }
-  60% {
-  opacity: 0.20313;
-  }
-  65% {
-  opacity: 0.71988;
-  }
-  70% {
-  opacity: 0.53455;
-  }
-  75% {
-  opacity: 0.37288;
-  }
-  80% {
-  opacity: 0.71428;
-  }
-  85% {
-  opacity: 0.70419;
-  }
-  90% {
-  opacity: 0.7003;
-  }
-  95% {
-  opacity: 0.36108;
-  }
-  100% {
-  opacity: 0.24387;
-  }
+}
+
+#nav {
+  height: 70px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  /* border: 1px solid red; */
+  padding: 10px;
+  mix-blend-mode: difference;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  animation: fadeEffect 4s;
+}
+
+#nav .title h1 {
+  font-family: TF;
+  text-align: center;
+
+
+}
+
+#nav .itch img {
+  width: 100%;
+  height: 2rem;
 }
 
 .crt::after {
@@ -100,7 +177,7 @@
 
 #hero {
   height: 100vh;
-  
+
 
   color: black;
 
@@ -113,33 +190,60 @@
   padding: 20px;
 }
 
-#hero h1{
+#hero h1 {
   font-size: 124px;
   font-family: TF;
+  animation: fadeEffect 2s;
+
 }
 
-#hero p{
+#hero p {
   text-align: center;
   font-size: 24px;
+  animation: fadeEffect 3s;
+
 }
 
 #promotion {
-  height: 60vh;
-  background-color: rgba(0, 255, 255, 0.149);
+  background-color: black;
+  height: 100%;
+  width: 100%;
+
+}
+
+.desc {
+  z-index: 2;
+  color: white;
+  font-size: 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  animation: fadeEffect 5s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1.5;
+}
+
+.vid {
+  width: 100%;
+}
+
+.vid video {
+  max-height: 500px;
+  width: 100%;
+  display: inline-block;
+  vertical-align: baseline;
+  overflow: hidden;
+
+  object-fit: cover;
+
 }
 </style>
-
-<script setup>
-import { onMounted } from 'vue';
-import LocomotiveScroll from "locomotive-scroll";
-
-
-
-onMounted(()=>{
-  const scroll = new LocomotiveScroll({
-    el: document.querySelector('[data-scroll-container]'),
-    smooth: true
-});
-})
-
-</script>
