@@ -99,11 +99,9 @@ onMounted(() => {
         <video autoplay="autoplay" playsinline loop="loop" width="100%" muted="muted">
           <source src="/autoplay.mp4" type="video/mp4">
         </video>
-        <div class="text-center desc  " data-speed="1">
-          <p data-speed="1.3">
-            Test your algorithm-building skills in PsuedoCards! Connect the cards in order to solve specific
-          problems.
-          Levels will include limitations for you to work and think of your way in finishing the task.
+        <div class="text-center desc" data-speed="1">
+          <p>
+            Test your algorithm-building skills in PsuedoCards!
         </p>
           
         </div>
@@ -113,6 +111,16 @@ onMounted(() => {
 
 
 
+    </div>
+
+    <div id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            YOOO
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -220,6 +228,7 @@ onMounted(() => {
   left: 0;
 
   height: 100%;
+  width: 100%;
 
   background-color: rgba(0, 0, 0, 0.5);
 
@@ -245,5 +254,9 @@ onMounted(() => {
 
   object-fit: cover;
 
+}
+
+#about{
+  height: 100vh;
 }
 </style>
