@@ -246,6 +246,11 @@ onMounted(() => {
               <div>
                 <h4>DEVELOPED BY:</h4>
                 <p>MARK THADDEUS R. MANUEL</p>
+                <p>Page Views: 
+
+                  <a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=12131667&style=0008&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>          
+                </p>
               </div>
             </div>
           </div>
